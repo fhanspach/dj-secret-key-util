@@ -1,0 +1,9 @@
+.project
+.pydevproject
+.settings
+venv
+.DS_Store
+.idea
+.coverage
+*.pyc
+
