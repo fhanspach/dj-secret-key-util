@@ -1,10 +1,15 @@
 import os
 import random
+import sys
 
 SECRET_KEY_FILE_PATH = os.path.expanduser("~/.secret_key")
 SECRET_KEY_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
 
 MSG_KEY_NOT_SET = "SECRET_KEY was not set. Generated a new Secret Key."
+
+
+def generate_key(chars):
+    return ''.join(random.choice(chars) for _ in range(50))
 
 
 def get_secret_key():
@@ -23,7 +28,13 @@ def get_secret_key():
         # the key isn't set yet - a new one will be created
         print(MSG_KEY_NOT_SET)
         chars = SECRET_KEY_CHARS
-        key = ''.join(random.choice(chars) for _ in range(50))
+        key = generate_key(chars)
         with open(SECRET_KEY_FILE_PATH, "w+") as secret_key_file:
             secret_key_file.write(key)
     return str(key)
+
+if __name__ == '__main__':
+    if "--generate" in sys.argv or "-g" in sys.argv:
+        print("New secret key: " + generate_key(SECRET_KEY_CHARS))
+    else:
+        print(get_secret_key())
