@@ -35,7 +35,7 @@ class TestSecretKey(unittest.TestCase):
         print(key_store.test_key)
         self.assertEqual('n4bl4', SecretKeyUtil.get_secret_key())
 
-    def generated_key_stays(self):
+    def test_generated_key_stays(self):
         self.mock_methods()
         key = SecretKeyUtil.get_secret_key()
         self.assertNotEqual("", key)
