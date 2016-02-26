@@ -8,33 +8,46 @@ SECRET_KEY_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
 MSG_KEY_NOT_SET = "SECRET_KEY was not set. Generated a new Secret Key."
 
 
-def generate_key(chars):
-    return ''.join(random.choice(chars) for _ in range(50))
+class SecretKeyUtil(object):
+    @staticmethod
+    def generate_key(chars):
+        return ''.join(random.choice(chars) for _ in range(50))
 
-
-def get_secret_key():
-    """
-    Reads the secret key as environment variable or generate it when it's not present.
-    :return: the secret key
-    """
-    key = os.environ.get("SECRET_KEY", None)
-    if key is None:
+    @staticmethod
+    def get_secret_key():
+        """
+        Reads the secret key from file system or generates it when it's not present.
+        :return: the secret key
+        """
         if os.path.isfile(SECRET_KEY_FILE_PATH):
-            # file exists, read the key
-            with open(SECRET_KEY_FILE_PATH, "r") as secret_key_file:
-                key = secret_key_file.read()
-                return str(key)
+            if SecretKeyUtil.key_file_present():
+                # file exists, read the key
+                return SecretKeyUtil.read_key()
+            # the key isn't set yet - a new one will be created
+            print(MSG_KEY_NOT_SET)
+            chars = SECRET_KEY_CHARS
+            key = SecretKeyUtil.generate_key(chars)
+            SecretKeyUtil.write_key(key)
+            return SecretKeyUtil.read_key()
 
-        # the key isn't set yet - a new one will be created
-        print(MSG_KEY_NOT_SET)
-        chars = SECRET_KEY_CHARS
-        key = generate_key(chars)
+    @staticmethod
+    def write_key(key):
         with open(SECRET_KEY_FILE_PATH, "w+") as secret_key_file:
             secret_key_file.write(key)
-    return str(key)
+
+    @staticmethod
+    def read_key():
+        with open(SECRET_KEY_FILE_PATH, "r") as secret_key_file:
+            key = secret_key_file.read()
+            return str(key)
+
+    @staticmethod
+    def key_file_present():
+        return os.path.isfile(SECRET_KEY_FILE_PATH)
+
 
 if __name__ == '__main__':
     if "--generate" in sys.argv or "-g" in sys.argv:
-        print("New secret key: " + generate_key(SECRET_KEY_CHARS))
+        print("New secret key: " + SecretKeyUtil.generate_key(SECRET_KEY_CHARS))
     else:
-        print(get_secret_key())
+        print(SecretKeyUtil.get_secret_key())
