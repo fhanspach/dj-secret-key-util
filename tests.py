@@ -27,7 +27,7 @@ class TestSecretKey(unittest.TestCase):
 
     def test_generate_new_key(self):
         self.mock_methods()
-        self.assertNotEqual("", SecretKeyUtil.get_secret_key())
+        self.assertTrue(SecretKeyUtil.get_secret_key())
 
     def test_use_old_key(self):
         key_store.test_key = "n4bl4"

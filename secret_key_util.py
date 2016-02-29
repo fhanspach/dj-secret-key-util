@@ -19,16 +19,15 @@ class SecretKeyUtil(object):
         Reads the secret key from file system or generates it when it's not present.
         :return: the secret key
         """
-        if os.path.isfile(SECRET_KEY_FILE_PATH):
-            if SecretKeyUtil.key_file_present():
-                # file exists, read the key
-                return SecretKeyUtil.read_key()
-            # the key isn't set yet - a new one will be created
-            print(MSG_KEY_NOT_SET)
-            chars = SECRET_KEY_CHARS
-            key = SecretKeyUtil.generate_key(chars)
-            SecretKeyUtil.write_key(key)
+        if SecretKeyUtil.key_file_present():
+            # file exists, read the key
             return SecretKeyUtil.read_key()
+        # the key isn't set yet - a new one will be created
+        print(MSG_KEY_NOT_SET)
+        chars = SECRET_KEY_CHARS
+        key = SecretKeyUtil.generate_key(chars)
+        SecretKeyUtil.write_key(key)
+        return SecretKeyUtil.read_key()
 
     @staticmethod
     def write_key(key):
