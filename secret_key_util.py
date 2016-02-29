@@ -51,3 +51,7 @@ if __name__ == '__main__':
         print("New secret key: " + SecretKeyUtil.generate_key(SECRET_KEY_CHARS))
     else:
         print(SecretKeyUtil.get_secret_key())
+
+
+def get_secret_key():
+    return SecretKeyUtil.get_secret_key()
