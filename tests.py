@@ -47,3 +47,4 @@ class TestSecretKey(unittest.TestCase):
         os.environ["SECRET_KEY"] = KEY
         key = SecretKeyUtil.get_secret_key()
         self.assertEqual(key, KEY)
+        del os.environ["SECRET_KEY"]
