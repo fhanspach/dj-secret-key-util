@@ -20,7 +20,7 @@ class SecretKeyUtil(object):
         :return: the secret key
         """
         env_key = os.getenv("SECRET_KEY", None)
-        if not env_key is None:
+        if env_key is not None:
             return env_key
 
         if SecretKeyUtil.key_file_present():
