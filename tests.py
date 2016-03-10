@@ -40,3 +40,10 @@ class TestSecretKey(unittest.TestCase):
         key = SecretKeyUtil.get_secret_key()
         self.assertNotEqual("", key)
         self.assertEqual(key, SecretKeyUtil.get_secret_key())
+
+    def test_defined_env_key(self):
+        import os
+        KEY = "N4BLA"
+        os.environ["SECRET_KEY"] = KEY
+        key = SecretKeyUtil.get_secret_key()
+        self.assertEqual(key, KEY)

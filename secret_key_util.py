@@ -19,6 +19,10 @@ class SecretKeyUtil(object):
         Reads the secret key from file system or generates it when it's not present.
         :return: the secret key
         """
+        env_key = os.getenv("SECRET_KEY", None)
+        if not env_key is None:
+            return env_key
+
         if SecretKeyUtil.key_file_present():
             # file exists, read the key
             return SecretKeyUtil.read_key()
