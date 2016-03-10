@@ -1,3 +1,5 @@
+import logging
+
 import os
 import random
 import sys
@@ -6,7 +8,9 @@ SECRET_KEY_FILE_PATH = os.path.expanduser("~/.secret_key")
 SECRET_KEY_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
 
 MSG_KEY_NOT_SET = "SECRET_KEY was not set. Generated a new Secret Key."
+MSG_KEY_ENV = "SECRET_KEY was taken from ENV variable."
 
+logger = logging.getLogger("dj-secret-key-util")
 
 class SecretKeyUtil(object):
     @staticmethod
@@ -21,13 +25,14 @@ class SecretKeyUtil(object):
         """
         env_key = os.getenv("SECRET_KEY", None)
         if env_key is not None:
+            logger.log(logging.WARN, MSG_KEY_ENV)
             return env_key
 
         if SecretKeyUtil.key_file_present():
             # file exists, read the key
             return SecretKeyUtil.read_key()
         # the key isn't set yet - a new one will be created
-        print(MSG_KEY_NOT_SET)
+        logger.log(logging.WARN, MSG_KEY_NOT_SET)
         chars = SECRET_KEY_CHARS
         key = SecretKeyUtil.generate_key(chars)
         SecretKeyUtil.write_key(key)
